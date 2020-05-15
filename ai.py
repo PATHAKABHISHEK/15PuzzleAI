@@ -4,3 +4,10 @@ problem = [
     ["3", "5", "6", "8"]
     ["2", "10", "11"," "]
 ]
+
+class Node:
+    def __init__(self, state, parent, action):
+        self.state = state
+        self.parent = parent
+        self.action = action
+
