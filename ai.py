@@ -1,3 +1,4 @@
+# Problem or Intial State
 problem = [
     ["1", "4", "7", "9"],
     ["15", "14", "13", "12"],
@@ -10,4 +11,18 @@ class Node:
         self.state = state
         self.parent = parent
         self.action = action
+
+# Depth First Search Approach
+class StackFrontier:
+    def __init__(self):
+        self.frontier = []
+    
+    def addNode(self):
+        pass
+
+    def removeNode(self):
+        pass
+
+    def checkForGoal(self):
+        pass
 
