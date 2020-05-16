@@ -2,10 +2,10 @@ import copy
 
 # Problem or Intial State
 problem = [
-    ["13", "2", "10", "3"],
-    ["1", "12", "8", "4"],
-    ["5", " ", "9", "6"],
-    ["15", "14", "11","7"]
+    ["1", "2", "8", "3"],
+    ["5", "6", " ", "4"],
+    ["9", "10", "7", "11"],
+    ["13", "14", "15","12"]
 ]
 
 # Goal state
@@ -273,7 +273,7 @@ class StackFrontier(QueueFrontier):
 
 
 
-my = StackFrontier()
+my = QueueFrontier()
 my.addNode(Node(problem, None, None, 0))
 totalMovementCost = 0
 
@@ -295,15 +295,19 @@ while(notReachedGoal):
             actions.pop()
             actions.reverse()
 
+
+
+for i in visitedStates:
+    print(i)
+    print()
+
+print()
+print()
 for i in state:
     print(i)
     print()
 
 for i in actions:
-    print(i)
-    print()
-
-for i in visitedStates:
     print(i)
     print()
 
