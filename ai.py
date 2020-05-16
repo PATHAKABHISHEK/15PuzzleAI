@@ -2,10 +2,10 @@ import copy
 
 # Problem or Intial State
 problem = [
-    ["1", "2", "3", "4"],
-    ["5", "6", " ", "8"],
-    ["9", "10", "7", "12"],
-    ["13", "14", "11","15"]
+    ["15", "14", "13", " "],
+    ["5", "6", "1", "3"],
+    ["7", "10", "9", "2"],
+    ["12", "11", "8","4"]
 ]
 
 # Goal state
@@ -18,9 +18,9 @@ problem = [
 
 goal = [
     ["1", "2", "3", "4"],
-    ["5", "10", "6", "8"],
-    ["9", " ", "7", "12"],
-    ["13", "14", "11","15"]
+    ["5", "6", "7", "8"],
+    ["9", "10", "11", "12"],
+    ["13", "14", "15"," "]
 ]
 
 # Types Of Action
@@ -31,15 +31,18 @@ goal = [
 
 notReachedGoal = True
 visitedStates = []
+state = []
+actions = []
 
 class Node:
-    def __init__(self, state, parent, action):
+    def __init__(self, state, parent, action, pathCost):
         self.state = state
         self.parent = parent
         self.action = action
+        self.pathCost = pathCost
 
-# Depth First Search Approach
-class StackFrontier:
+# Breadth First Search Approach
+class QueueFrontier:
     def __init__(self):
         self.frontier = []
     
@@ -58,7 +61,7 @@ class StackFrontier:
 
 
     def checkForGoal(self, node):
-        
+        global notReachedGoal
         if (node.state == goal):
             print("reached goal state")
             notReachedGoal = False
@@ -90,7 +93,7 @@ class StackFrontier:
             #     print(m)
 
             if not stateForSolving in visitedStates:
-                self.frontier.append(Node(stateForSolving, node, "down"))
+                self.frontier.append(Node(stateForSolving, node, "down", node.pathCost + 1))
 
             # right
             stateForSolving = copy.deepcopy(node.state)
@@ -99,7 +102,7 @@ class StackFrontier:
             stateForSolving[3][2] = " "
             
             if not stateForSolving in visitedStates:
-                self.frontier.append(Node(stateForSolving, node, "right"))
+                self.frontier.append(Node(stateForSolving, node, "right", node.pathCost + 1))
 
 
         elif(spaceRowCoord == 0 and spaceColCoord == 0):
@@ -109,7 +112,7 @@ class StackFrontier:
             stateForSolving[0][0] = temp
             stateForSolving[1][0] = " "
             if not stateForSolving in visitedStates:
-                self.frontier.append(Node(stateForSolving, node, "up"))
+                self.frontier.append(Node(stateForSolving, node, "up", node.pathCost + 1))
 
             # left
             stateForSolving = copy.deepcopy(node.state)
@@ -117,7 +120,7 @@ class StackFrontier:
             stateForSolving[0][0] = temp
             stateForSolving[0][1] = " "
             if not stateForSolving in visitedStates:
-                self.frontier.append(Node(stateForSolving, node, "left"))
+                self.frontier.append(Node(stateForSolving, node, "left", node.pathCost + 1))
 
 
 
@@ -128,7 +131,7 @@ class StackFrontier:
             stateForSolving[3][0] = temp
             stateForSolving[2][0] = " "
             if not stateForSolving in visitedStates:
-                self.frontier.append(Node(stateForSolving, node, "down"))
+                self.frontier.append(Node(stateForSolving, node, "down", node.pathCost + 1))
 
             # left
             stateForSolving = copy.deepcopy(node.state)
@@ -136,7 +139,7 @@ class StackFrontier:
             stateForSolving[3][0] = temp
             stateForSolving[3][1] = " "
             if not stateForSolving in visitedStates:
-                self.frontier.append(Node(stateForSolving, node, "left"))
+                self.frontier.append(Node(stateForSolving, node, "left", node.pathCost + 1))
 
 
         elif(spaceRowCoord == 0 and spaceColCoord == 3):
@@ -146,7 +149,7 @@ class StackFrontier:
             stateForSolving[0][3] = temp
             stateForSolving[1][3] = " "
             if not stateForSolving in visitedStates:
-                self.frontier.append(Node(stateForSolving, node, "up"))
+                self.frontier.append(Node(stateForSolving, node, "up", node.pathCost + 1))
 
             # right
             stateForSolving = copy.deepcopy(node.state)
@@ -154,7 +157,7 @@ class StackFrontier:
             stateForSolving[0][3] = temp
             stateForSolving[0][2] = " "
             if not stateForSolving in visitedStates:
-                self.frontier.append(Node(stateForSolving, node, "right"))
+                self.frontier.append(Node(stateForSolving, node, "right", node.pathCost + 1))
 
         elif(spaceRowCoord == 2 or spaceRowCoord == 1 and spaceColCoord == 0 or spaceColCoord == 3):
             # up
@@ -163,7 +166,7 @@ class StackFrontier:
             stateForSolving[spaceRowCoord][spaceColCoord] = temp
             stateForSolving[spaceRowCoord + 1][spaceColCoord] = " "
             if not stateForSolving in visitedStates:
-                self.frontier.append(Node(stateForSolving, node, "up"))
+                self.frontier.append(Node(stateForSolving, node, "up", node.pathCost + 1))
 
             # down
             stateForSolving = copy.deepcopy(node.state)
@@ -171,34 +174,34 @@ class StackFrontier:
             stateForSolving[spaceRowCoord][spaceColCoord] = temp
             stateForSolving[spaceRowCoord - 1][spaceColCoord] = " "
             if not stateForSolving in visitedStates:
-                self.frontier.append(Node(stateForSolving, node, "down"))
+                self.frontier.append(Node(stateForSolving, node, "down", node.pathCost + 1))
             
             # left
             if spaceColCoord == 0:
                 stateForSolving = copy.deepcopy(node.state)
                 temp = node.state[spaceRowCoord][spaceColCoord + 1]
                 stateForSolving[spaceRowCoord][spaceColCoord] = temp
-            stateForSolving[spaceRowCoord][spaceColCoord + 1] = " "
-            if not stateForSolving in visitedStates:
-                self.frontier.append(Node(stateForSolving, node, "left"))
+                stateForSolving[spaceRowCoord][spaceColCoord + 1] = " "
+                if not stateForSolving in visitedStates:
+                    self.frontier.append(Node(stateForSolving, node, "left", node.pathCost + 1))
             
              #  right
             if spaceColCoord == 3:
                 stateForSolving = copy.deepcopy(node.state)
                 temp = node.state[spaceRowCoord][spaceColCoord - 1]
                 stateForSolving[spaceRowCoord][spaceColCoord] = temp
-            stateForSolving[spaceRowCoord][spaceColCoord - 1] = " "
-            if not stateForSolving in visitedStates:
-                self.frontier.append(Node(stateForSolving, node, "right"))
+                stateForSolving[spaceRowCoord][spaceColCoord - 1] = " "
+                if not stateForSolving in visitedStates:
+                    self.frontier.append(Node(stateForSolving, node, "right", node.pathCost + 1))
 
-        elif spaceRowCoord == 3 or spaceRowCoord == 1 and spaceColCoord >=1 and spaceColCoord <= 2:
+        elif spaceRowCoord == 3 or spaceRowCoord == 0 and spaceColCoord >=1 and spaceColCoord <= 2:
             # right
             stateForSolving = copy.deepcopy(node.state)
             temp = node.state[spaceRowCoord][spaceColCoord - 1]
             stateForSolving[spaceRowCoord][spaceColCoord] = temp
             stateForSolving[spaceRowCoord][spaceColCoord - 1] = " "
             if not stateForSolving in visitedStates:
-                self.frontier.append(Node(stateForSolving, node, "right"))
+                self.frontier.append(Node(stateForSolving, node, "right", node.pathCost + 1))
             
             # left
             stateForSolving = copy.deepcopy(node.state)
@@ -206,16 +209,16 @@ class StackFrontier:
             stateForSolving[spaceRowCoord][spaceColCoord] = temp
             stateForSolving[spaceRowCoord][spaceColCoord + 1] = " "
             if not stateForSolving in visitedStates:
-                self.frontier.append(Node(stateForSolving, node, "left"))
+                self.frontier.append(Node(stateForSolving, node, "left", node.pathCost + 1))
 
             # up
-             if spaceRowCoord == 0:
+            if spaceRowCoord == 0:
                 stateForSolving = copy.deepcopy(node.state)
                 temp = node.state[spaceRowCoord + 1][spaceColCoord]
                 stateForSolving[spaceRowCoord][spaceColCoord] = temp
                 stateForSolving[spaceRowCoord + 1][spaceColCoord] = " "
                 if not stateForSolving in visitedStates:
-                    self.frontier.append(Node(stateForSolving, node, "up"))
+                    self.frontier.append(Node(stateForSolving, node, "up", node.pathCost + 1))
 
             # down
             if spaceRowCoord == 3:
@@ -224,7 +227,7 @@ class StackFrontier:
                 stateForSolving[spaceRowCoord][spaceColCoord] = temp
                 stateForSolving[spaceRowCoord - 1][spaceColCoord] = " "
                 if not stateForSolving in visitedStates:
-                    self.frontier.append(Node(stateForSolving, node, "down"))
+                    self.frontier.append(Node(stateForSolving, node, "down", node.pathCost + 1))
         else:
             # up
             stateForSolving = copy.deepcopy(node.state)
@@ -232,7 +235,7 @@ class StackFrontier:
             stateForSolving[spaceRowCoord][spaceColCoord] = temp
             stateForSolving[spaceRowCoord + 1][spaceColCoord] = " "
             if not stateForSolving in visitedStates:
-                self.frontier.append(Node(stateForSolving, node, "up"))
+                self.frontier.append(Node(stateForSolving, node, "up", node.pathCost + 1))
 
             # down
             stateForSolving = copy.deepcopy(node.state)
@@ -240,7 +243,7 @@ class StackFrontier:
             stateForSolving[spaceRowCoord][spaceColCoord] = temp
             stateForSolving[spaceRowCoord - 1][spaceColCoord] = " "
             if not stateForSolving in visitedStates:
-                self.frontier.append(Node(stateForSolving, node, "down"))
+                self.frontier.append(Node(stateForSolving, node, "down", node.pathCost + 1))
 
             # left
             stateForSolving = copy.deepcopy(node.state)
@@ -248,7 +251,7 @@ class StackFrontier:
             stateForSolving[spaceRowCoord][spaceColCoord] = temp
             stateForSolving[spaceRowCoord][spaceColCoord + 1] = " "
             if not stateForSolving in visitedStates:
-                self.frontier.append(Node(stateForSolving, node, "left"))
+                self.frontier.append(Node(stateForSolving, node, "left", node.pathCost + 1))
 
             # right
             stateForSolving = copy.deepcopy(node.state)
@@ -256,20 +259,52 @@ class StackFrontier:
             stateForSolving[spaceRowCoord][spaceColCoord] = temp
             stateForSolving[spaceRowCoord][spaceColCoord - 1] = " "
             if not stateForSolving in visitedStates:
-                self.frontier.append(Node(stateForSolving, node, "right"))
+                self.frontier.append(Node(stateForSolving, node, "right", ++node.pathCost + 1))
+
+class StackFrontier(QueueFrontier):
+    def removeNode(self):
+        node = self.frontier[-1]
+        visitedStates.append(node.state)
+        if len(self.frontier) > 1:
+            self.frontier = self.frontier[:-1]
+        else:
+            self.frontier = []
+        return node
 
 
-my = StackFrontier()
-my.addNode(Node(problem, None, None))
+
+my = QueueFrontier()
+my.addNode(Node(problem, None, None, 0))
+totalMovementCost = 0
 
 while(notReachedGoal):
+    totalMovementCost += 1
     if len(my.frontier) == 0:
        pass
     else:
         node = my.removeNode()
-        for i in my.frontier:
-            print(i.state)
-        print()
-        print()
         if not my.checkForGoal(node):
             my.solve(node)
+        else:
+            myNode = node
+            while(not myNode == None):
+                state.append(myNode.state)
+                actions.append(myNode.action)
+                myNode = myNode.parent
+            state.reverse()
+            actions.pop()
+            actions.reverse()
+
+for i in state:
+    print(i)
+    print()
+
+for i in actions:
+    print(i)
+    print()
+
+for i in visitedStates:
+    print(i)
+    print()
+
+print(totalMovementCost)
